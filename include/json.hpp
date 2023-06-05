@@ -17,6 +17,7 @@ protected:
 public:
     virtual ~Value() = 0;
     Type getType();
+    Value * parse_file(const std::string& filename);
     virtual std::string toString() const = 0;
     virtual Value* parse(const std::string& jsonString) = 0;
 };
