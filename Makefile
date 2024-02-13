@@ -28,4 +28,5 @@ object.o: src/object.cpp
 	${cc} ${cpp_flags} -c src/object.cpp -o object.o
 
 clean:
-	rm -f *.o *.so
+	rm -f *.o *.so *.a
+
