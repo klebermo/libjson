@@ -5,6 +5,7 @@ all: libjson
 
 libjson: value.o nullable.o string.o number.o boolean.o array.o object.o
 	${cc} ${cpp_flags} -shared -o libjson.so value.o nullable.o  string.o number.o boolean.o array.o object.o
+	ar -rcs libjson.a value.o nullable.o  string.o number.o boolean.o array.o object.o
 
 value.o: src/value.cpp
 	${cc} ${cpp_flags} -c src/value.cpp -o value.o
