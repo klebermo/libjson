@@ -9,8 +9,9 @@ private:
 public:
     JSONBoolean();
     JSONBoolean(const std::string& json_string);
+    JSONBoolean(bool value);
     ~JSONBoolean();
-    bool getValue();
+
     std::string toString() const override;
     JSONBoolean* parse(const std::string& json_string) override;
 };

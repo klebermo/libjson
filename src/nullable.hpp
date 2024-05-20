@@ -8,7 +8,7 @@ public:
     JSONNullable();
     JSONNullable(const std::string& json_string);
     ~JSONNullable();
-    std::string getValue();
+
     std::string toString() const override;
     JSONNullable* parse(const std::string& json_string) override;
 };

@@ -9,6 +9,11 @@ JSONBoolean::JSONBoolean(const std::string& json_string) {
     this->parse(json_string);
 }
 
+JSONBoolean::JSONBoolean(bool value) {
+    this->type = boolean;
+    this->value = value;
+}
+
 JSONBoolean::~JSONBoolean() {
     //
 }
@@ -16,10 +21,6 @@ JSONBoolean::~JSONBoolean() {
 std::string JSONBoolean::toString() const {
     return value ? "true" : "false";
 }
-
-bool JSONBoolean::getValue() {
-    return this->value;
-}    
 
 JSONBoolean* JSONBoolean::parse(const std::string& json_string) {
     if (json_string.compare("true") == 0) {

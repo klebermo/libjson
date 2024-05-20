@@ -1,5 +1,13 @@
 #include "value.hpp"
 
+Value::Value() {
+    //
+}
+
+Value::Value(Value* value) {
+    //
+}
+
 Value::~Value() {
     //
 }
@@ -22,6 +30,30 @@ Value * Value::parse_file(const std::string& filename) {
     }
 
     return this->parse(json_string);
+}
+
+std::ostream& operator<<(std::ostream& os, const Value& value) {
+    os << value.toString();
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Value& value) {
+    std::string jsonString;
+    is >> jsonString;
+    Value* parsedValue = value.parse(jsonString);
+    if (parsedValue) {
+        value = std::move(*parsedValue);
+        delete parsedValue;
+    }
+    return is;
+}
+
+Value& Value::operator[](int index) {
+    throw std::runtime_error("Not an array");
+}
+
+Value& Value::operator[](const std::string key) {
+    throw std::runtime_error("Not an object");
 }
 
 std::string_view ltrim(std::string_view str)

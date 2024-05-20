@@ -13,15 +13,11 @@ JSONString::~JSONString() {
     //
 }
 
-std::string JSONString::getValue() {
-    return this->value;
-}
-
 std::string JSONString::toString() const {
-    return "\"" + value + "\"";
+    return value;
 }
 
 JSONString* JSONString::parse(const std::string& json_string) {
-    value = json_string.substr(1, json_string.length() - 2);
+    value = json_string.substr(0, json_string.length());
     return this;
 }

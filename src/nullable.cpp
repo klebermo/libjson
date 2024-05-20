@@ -12,12 +12,8 @@ JSONNullable::~JSONNullable() {
     //
 }
 
-std::string JSONNullable::getValue() {
-    return nullptr;
-}
-
 std::string JSONNullable::toString() const {
-    return "\"null\"";
+    return "null";
 }
 
 JSONNullable* JSONNullable::parse(const std::string& json_string) {

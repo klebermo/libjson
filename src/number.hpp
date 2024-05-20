@@ -9,8 +9,10 @@ private:
 public:
     JSONNumber();
     JSONNumber(const std::string& json_string);
+    JSONNumber(int value);
+    JSONNumber(double value);
     ~JSONNumber();
-    double getValue();
+
     std::string toString() const override;
     JSONNumber* parse(const std::string& json_string) override;
 };

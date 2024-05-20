@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <any>
 
 enum Type {
     object,
@@ -20,6 +21,12 @@ public:
     Value * parse_file(const std::string& filename);
     virtual std::string toString() const = 0;
     virtual Value* parse(const std::string& jsonString) = 0;
+
+    friend std::ostream& operator<<(std::ostream& os, const Value& value);
+    friend std::istream& operator>>(std::istream& is, Value& value);
+
+    virtual Value& operator[](int index);
+    virtual Value& operator[](const std::string key);
 };
 
 class JSONNullable : public Value {
@@ -27,7 +34,7 @@ public:
     JSONNullable();
     JSONNullable(const std::string& json_string);
     ~JSONNullable();
-    std::string getValue();
+
     std::string toString() const override;
     JSONNullable* parse(const std::string& json_string) override;
 };
@@ -39,7 +46,7 @@ public:
     JSONString();
     JSONString(const std::string& json_string);
     ~JSONString();
-    std::string getValue();
+
     std::string toString() const override;
     JSONString* parse(const std::string& json_string) override;
 };
@@ -51,7 +58,7 @@ public:
     JSONNumber();
     JSONNumber(const std::string& json_string);
     ~JSONNumber();
-    double getValue();
+
     std::string toString() const override;
     JSONNumber* parse(const std::string& json_string) override;
 };
@@ -63,39 +70,45 @@ public:
     JSONBoolean();
     JSONBoolean(const std::string& json_string);
     ~JSONBoolean();
-    bool getValue();
+
     std::string toString() const override;
     JSONBoolean* parse(const std::string& json_string) override;
 };
 
 class JSONArray : public Value {
 private:
-    std::vector<const Value*> values;
+    std::vector<std::unique_ptr<Value>> values;
 public:
     JSONArray();
+    JSONArray(JSONArray* array);
     JSONArray(const std::string& json_string);
     ~JSONArray();
-    std::vector<const Value*> getValues();
 
     std::string toString() const override;
-    JSONArray* parse(const std::string& json_string) override;
+    JSONArray* parse(const std::string& json_tring) override;
 
-    void add(const Value* value);
-    const Value* get(int index);
+    JSONArray& operator+(std::unique_ptr<Value> value);
+    JSONArray& operator+(const char* value);
+
+    Value& operator[](int index);
 };
 
 class JSONObject : public Value {
 private:
-    std::map<const std::string, const Value*> values;
+    std::map<const std::string, std::unique_ptr<Value>> values;
 public:
     JSONObject();
+    JSONObject(JSONObject* value);
     JSONObject(const std::string& json_string);
     ~JSONObject();
-    std::map<std::string, const Value*> getValues();
 
     std::string toString() const override;
-    JSONObject* parse(const std::string& json_string) override;
+    JSONObject* parse(const std::string& json_tring) override;
 
-    void add(const std::string& key, const Value* value);
-    const Value* get(const std::string key);
+    JSONObject& operator+(std::pair<const std::string, std::unique_ptr<Value>> pair);
+    JSONObject& operator+(std::pair<const std::string, std::string> pair);
+    JSONObject& operator+(std::pair<const std::string, double> pair);
+    JSONObject& operator+(std::pair<const std::string, JSONArray*> pair);
+
+    Value& operator[](std::string key);
 };
