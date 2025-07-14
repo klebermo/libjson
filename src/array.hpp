@@ -13,13 +13,13 @@ public:
     JSONArray(const std::string& json_string);
     ~JSONArray();
 
-    std::string toString() const override;
     JSONArray* parse(const std::string& json_tring) override;
+    std::string toString() const override;
+    std::string toJson() const override;
 
-    JSONArray& operator+(std::unique_ptr<Value> value);
-    JSONArray& operator+(const char* value);
-
-    Value& operator[](int index) override;
+    Value& operator[](int index);
+    int size() const;
+    void add(std::unique_ptr<Value> value);
 };
 
 #endif

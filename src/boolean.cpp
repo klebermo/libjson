@@ -1,26 +1,16 @@
 #include "boolean.hpp"
 
-JSONBoolean::JSONBoolean() {
-    this->type = boolean;
-}
+JSONBoolean::JSONBoolean() {}
 
 JSONBoolean::JSONBoolean(const std::string& json_string) {
-    this->type = boolean;
     this->parse(json_string);
 }
 
 JSONBoolean::JSONBoolean(bool value) {
-    this->type = boolean;
     this->value = value;
 }
 
-JSONBoolean::~JSONBoolean() {
-    //
-}
-
-std::string JSONBoolean::toString() const {
-    return value ? "true" : "false";
-}
+JSONBoolean::~JSONBoolean() {}
 
 JSONBoolean* JSONBoolean::parse(const std::string& json_string) {
     if (json_string.compare("true") == 0) {
@@ -30,4 +20,13 @@ JSONBoolean* JSONBoolean::parse(const std::string& json_string) {
         value = false;
         return this;
     }
+}
+
+
+std::string JSONBoolean::toString() const {
+    return value ? "true" : "false";
+}
+
+std::string JSONBoolean::toJson() const {
+    return value ? "\"true\"" : "\"false\"";
 }

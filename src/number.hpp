@@ -8,13 +8,15 @@ private:
     double value;
 public:
     JSONNumber();
-    JSONNumber(const std::string& json_string);
     JSONNumber(int value);
     JSONNumber(double value);
+    JSONNumber(const std::string& json_string);
+    JSONNumber(const Value& value);
     ~JSONNumber();
 
-    std::string toString() const override;
     JSONNumber* parse(const std::string& json_string) override;
+    std::string toString() const override;
+    std::string toJson() const override;
 };
 
 #endif

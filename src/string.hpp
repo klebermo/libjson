@@ -11,8 +11,9 @@ public:
     JSONString(const std::string& json_string);
     ~JSONString();
 
-    std::string toString() const override;
     JSONString* parse(const std::string& json_string) override;
+    std::string toString() const override;
+    std::string toJson() const override;
 };
 
 #endif

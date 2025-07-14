@@ -12,8 +12,9 @@ public:
     JSONBoolean(bool value);
     ~JSONBoolean();
 
-    std::string toString() const override;
     JSONBoolean* parse(const std::string& json_string) override;
+    std::string toString() const override;
+    std::string toJson() const override;
 };
 
 #endif
