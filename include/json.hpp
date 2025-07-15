@@ -18,6 +18,15 @@ public:
     friend std::istream& operator>>(std::istream& is, Value& value);
 };
 
+template<typename T>
+T value_as(const Value& value) {
+    const T* casted = dynamic_cast<const T*>(&value);
+    if (!casted) {
+        throw std::runtime_error("Invalid type cast");
+    }
+    return *casted; // cópia
+}
+
 class JSONNullable : public Value {
 public:
     JSONNullable();
@@ -77,13 +86,38 @@ public:
     std::string toJson() const override;
 };
 
+class JSONObject;
+
 class JSONArray : public Value {
 private:
     std::vector<std::unique_ptr<Value>> values;
 public:
     JSONArray();
-    JSONArray(JSONArray* array);
+    JSONArray(const JSONArray& value);
     ~JSONArray();
+
+    JSONArray(std::initializer_list<std::string> values);
+    JSONArray(std::initializer_list<const char*> values);
+    JSONArray(std::initializer_list<int> values);
+    JSONArray(std::initializer_list<float> values);
+    JSONArray(std::initializer_list<double> values);
+    JSONArray(std::initializer_list<bool> values);
+
+    JSONArray& operator=(std::initializer_list<std::string> values);
+    JSONArray& operator=(std::initializer_list<const char*> values);
+    JSONArray& operator=(std::initializer_list<int> values);
+    JSONArray& operator=(std::initializer_list<float> values);
+    JSONArray& operator=(std::initializer_list<double> values);
+    JSONArray& operator=(std::initializer_list<bool> values);
+
+    JSONArray& operator+=(std::string value);
+    JSONArray& operator+=(const char * value);
+    JSONArray& operator+=(int value);
+    JSONArray& operator+=(float value);
+    JSONArray& operator+=(double value);
+    JSONArray& operator+=(bool value);
+    JSONArray& operator+=(const JSONArray& value);
+    JSONArray& operator+=(const JSONObject& value);
 
     JSONArray* parse(const std::string& json_tring) override;
     std::unique_ptr<Value> clone() const override;
@@ -102,12 +136,12 @@ public:
     void add(double value);
     void add(bool value);
 
-    void add(const std::string values[]);
-    void add(const char * values[]);
-    void add(const int values[]);
-    void add(const float values[]);
-    void add(const double values[]);
-    void add(const bool values[]);
+    void add(std::initializer_list<std::string> values);
+    void add(std::initializer_list<const char*> values);
+    void add(std::initializer_list<int> values);
+    void add(std::initializer_list<float> values);
+    void add(std::initializer_list<double> values);
+    void add(std::initializer_list<bool> values);
 };
 
 class JSONObject : public Value {
@@ -115,8 +149,31 @@ private:
     std::map<std::string, std::unique_ptr<Value>> values;
 public:
     JSONObject();
-    JSONObject(JSONObject* value);
+    JSONObject(const JSONObject& value);
     ~JSONObject();
+
+    JSONObject(std::initializer_list<std::pair<std::string, std::string>> values);
+    JSONObject(std::initializer_list<std::pair<std::string, const char*>> values);
+    JSONObject(std::initializer_list<std::pair<std::string, int>> values);
+    JSONObject(std::initializer_list<std::pair<std::string, float>> values);
+    JSONObject(std::initializer_list<std::pair<std::string, double>> values);
+    JSONObject(std::initializer_list<std::pair<std::string, bool>> values);
+
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, std::string>> values);
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, const char*>> values);
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, int>> values);
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, float>> values);
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, double>> values);
+    JSONObject& operator=(std::initializer_list<std::pair<std::string, bool>> values);
+
+    JSONObject& operator+=(std::pair<std::string, std::string> value);
+    JSONObject& operator+=(std::pair<std::string, const char*> value);
+    JSONObject& operator+=(std::pair<std::string, int> value);
+    JSONObject& operator+=(std::pair<std::string, float> value);
+    JSONObject& operator+=(std::pair<std::string, double> value);
+    JSONObject& operator+=(std::pair<std::string, bool> value);
+    JSONObject& operator+=(std::pair<std::string, JSONObject> value);
+    JSONObject& operator+=(std::pair<std::string, JSONArray> value);
 
     JSONObject* parse(const std::string& json_tring) override;
     std::unique_ptr<Value> clone() const override;
@@ -135,10 +192,10 @@ public:
     void add(std::string key, double value);
     void add(std::string key, bool value);
 
-    void add(std::string key, std::string values[]);
-    void add(std::string key, const char * values[]);
-    void add(std::string key, int values[]);
-    void add(std::string key, float values[]);
-    void add(std::string key, double values[]);
-    void add(std::string key, bool values[]);
+    void add(std::string key, std::initializer_list<std::string> values);
+    void add(std::string key, std::initializer_list<const char*> values);
+    void add(std::string key, std::initializer_list<int> values);
+    void add(std::string key, std::initializer_list<float> values);
+    void add(std::string key, std::initializer_list<double> values);
+    void add(std::string key, std::initializer_list<bool> values);
 };

@@ -9,6 +9,132 @@ JSONArray::JSONArray(const JSONArray& value) {
     }
 }
 
+JSONArray::JSONArray(std::initializer_list<std::string> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
+}
+
+JSONArray::JSONArray(std::initializer_list<const char*> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
+}
+
+JSONArray::JSONArray(std::initializer_list<int> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+}
+
+JSONArray::JSONArray(std::initializer_list<float> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+}
+
+JSONArray::JSONArray(std::initializer_list<double> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+}
+
+JSONArray::JSONArray(std::initializer_list<bool> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONBoolean>(val));
+    }
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<std::string> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<const char*> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<int> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<float> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<double> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator=(std::initializer_list<bool> values) {
+    this->values.clear();
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONBoolean>(val));
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(std::string value) {
+    this->values.push_back(std::make_unique<JSONString>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(const char* value) {
+    this->values.push_back(std::make_unique<JSONString>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(int value) {
+    this->values.push_back(std::make_unique<JSONNumber>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(float value) {
+    this->values.push_back(std::make_unique<JSONNumber>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(double value) {
+    this->values.push_back(std::make_unique<JSONNumber>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(bool value) {
+    this->values.push_back(std::make_unique<JSONBoolean>(value));
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(const JSONArray& value) {
+    for (const auto& item : value.values) {
+        this->values.push_back(item->clone());
+    }
+    return *this;
+}
+
+JSONArray& JSONArray::operator+=(const JSONObject& value) {
+    this->values.push_back(std::make_unique<JSONObject>(value));
+    return *this;
+}
+
 JSONArray::~JSONArray() {
     this->values.clear();
 }
@@ -121,26 +247,38 @@ void JSONArray::add(bool value) {
     this->values.push_back(std::make_unique<JSONBoolean>(value));
 }
 
-void JSONArray::add(const std::string values[]) {
-    //
+void JSONArray::add(std::initializer_list<std::string> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
 }
 
-void JSONArray::add(const char * values[]) {
-    //
+void JSONArray::add(std::initializer_list<const char*> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONString>(val));
+    }
 }
 
-void JSONArray::add(const int values[]) {
-    //
+void JSONArray::add(std::initializer_list<int> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
 }
 
-void JSONArray::add(const float values[]) {
-    //
+void JSONArray::add(std::initializer_list<float> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
 }
 
-void JSONArray::add(const double values[]) {
-    //
+void JSONArray::add(std::initializer_list<double> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONNumber>(val));
+    }
 }
 
-void JSONArray::add(const bool values[]) {
-    //
+void JSONArray::add(std::initializer_list<bool> values) {
+    for (const auto& val : values) {
+        this->values.push_back(std::make_unique<JSONBoolean>(val));
+    }
 }

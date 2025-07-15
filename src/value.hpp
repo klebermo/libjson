@@ -15,7 +15,7 @@
 class Value {
 public:
     Value * parse_file(const std::string& filename);
-    virtual ~Value() = default;
+    virtual ~Value() = 0;
 
     virtual Value* parse(const std::string& jsonString) = 0;
     virtual std::unique_ptr<Value> clone() const = 0;
