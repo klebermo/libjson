@@ -8,10 +8,12 @@ private:
     std::string value;
 public:
     JSONString();
-    JSONString(const std::string& json_string);
+    JSONString(const JSONString& other);
+    JSONString(const std::string& value);
     ~JSONString();
 
     JSONString* parse(const std::string& json_string) override;
+    std::unique_ptr<Value> clone() const override;
     std::string toString() const override;
     std::string toJson() const override;
 };

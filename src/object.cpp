@@ -2,14 +2,11 @@
 
 JSONObject::JSONObject() {}
 
-JSONObject::JSONObject(JSONObject* value) {
-    for (auto& item : value->values) {
-        values.insert(std::move(item));
+JSONObject::JSONObject(const JSONObject& value) {
+    for (const auto& [key, val] : value.values) {
+        std::unique_ptr<Value> newItem = val->clone();
+        values[key] = std::move(newItem);
     }
-}
-
-JSONObject::JSONObject(const std::string& json_string) {
-    this->parse(json_string);
 }
 
 JSONObject::~JSONObject() {
@@ -31,17 +28,29 @@ JSONObject* JSONObject::parse(const std::string& json_string) {
         std::string value = parse_value(json_string, i);
 
         if (value.front() == '{') {
-            values[key] = std::make_unique<JSONObject>(value);
+            JSONObject object;
+            object.parse(value);
+            values[key] = std::make_unique<JSONObject>(object);
         } else if (value.front() == '[') {
-            values[key] = std::make_unique<JSONArray>(value);
+            JSONArray array;
+            array.parse(value);
+            values[key] = std::make_unique<JSONArray>(array);
         } else if (somenteNumeros(value)) {
-            values[key] = std::make_unique<JSONNumber>(value);
+            JSONNumber number;
+            number.parse(value);
+            values[key] = std::make_unique<JSONNumber>(number);
         } else if (value == "true" || value == "false") {
-            values[key] = std::make_unique<JSONBoolean>(value);
+            JSONBoolean boolean;
+            boolean.parse(value);
+            values[key] = std::make_unique<JSONBoolean>(boolean);
         } else if(isalnum(value.front())) {
-            values[key] = std::make_unique<JSONString>(value);
+            JSONString string;
+            string.parse(value);
+            values[key] = std::make_unique<JSONString>(string);
         } else {
-            values[key] = std::make_unique<JSONNullable>(value);
+            JSONNullable nullable;
+            nullable.parse(value);
+            values[key] = std::make_unique<JSONNullable>(nullable);
         }
 
         skip_whitespace(json_string, i);
@@ -50,6 +59,10 @@ JSONObject* JSONObject::parse(const std::string& json_string) {
     }
 
     return this;
+}
+
+std::unique_ptr<Value> JSONObject::clone() const {
+    return std::make_unique<JSONObject>(*this);
 }
 
 std::string JSONObject::toString() const {
@@ -76,14 +89,64 @@ std::string JSONObject::toJson() const {
     return result;
 }
 
-int JSONObject::size() const {
-    return this->values.size();
-}
-
 Value& JSONObject::operator[](std::string key) {
     return *values[key];
+}
+
+int JSONObject::size() const {
+    return this->values.size();
 }
 
 void JSONObject::add(std::string key, std::unique_ptr<Value> value) {
     this->values[key] = std::move(value);
 }
+
+void JSONObject::add(std::string key, std::string value) {
+    this->values[key] = std::make_unique<JSONString>(value);
+}
+
+void JSONObject::add(std::string key, const char * value) {
+    this->values[key] = std::make_unique<JSONString>(value);
+}
+
+void JSONObject::add(std::string key, int value) {
+    this->values[key] = std::make_unique<JSONNumber>(value);
+}
+
+void JSONObject::add(std::string key, float value) {
+    this->values[key] = std::make_unique<JSONNumber>(value);
+}
+
+void JSONObject::add(std::string key, double value) {
+    this->values[key] = std::make_unique<JSONNumber>(value);
+}
+
+void JSONObject::add(std::string key, bool value) {
+    this->values[key] = std::make_unique<JSONBoolean>(value);
+}
+
+void JSONObject::add(std::string key, std::string values[]) {
+    //
+}
+
+void JSONObject::add(std::string key, const char * values[]) {
+    //
+}
+
+void JSONObject::add(std::string key, int values[]) {
+    //
+}
+
+void JSONObject::add(std::string key, float values[]) {
+    //
+}
+
+void JSONObject::add(std::string key, double values[]) {
+    //
+}
+
+void JSONObject::add(std::string key, bool values[]) {
+    //
+}
+
+

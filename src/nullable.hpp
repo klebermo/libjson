@@ -6,10 +6,11 @@
 class JSONNullable : public Value {
 public:
     JSONNullable();
-    JSONNullable(const std::string& json_string);
+    JSONNullable(const JSONNullable& other);
     ~JSONNullable();
 
     JSONNullable* parse(const std::string& json_string) override;
+    std::unique_ptr<Value> clone() const override;
     std::string toString() const override;
     std::string toJson() const override;
 };

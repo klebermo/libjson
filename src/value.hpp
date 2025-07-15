@@ -15,10 +15,10 @@
 class Value {
 public:
     Value * parse_file(const std::string& filename);
-
-    virtual ~Value() = 0;
+    virtual ~Value() = default;
 
     virtual Value* parse(const std::string& jsonString) = 0;
+    virtual std::unique_ptr<Value> clone() const = 0;
     virtual std::string toString() const = 0;
     virtual std::string toJson() const = 0;
 

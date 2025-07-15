@@ -2,9 +2,7 @@
 
 JSONBoolean::JSONBoolean() {}
 
-JSONBoolean::JSONBoolean(const std::string& json_string) {
-    this->parse(json_string);
-}
+JSONBoolean::JSONBoolean(const JSONBoolean& other) : value(other.value) {}
 
 JSONBoolean::JSONBoolean(bool value) {
     this->value = value;
@@ -22,6 +20,9 @@ JSONBoolean* JSONBoolean::parse(const std::string& json_string) {
     }
 }
 
+std::unique_ptr<Value> JSONBoolean::clone() const {
+    return std::make_unique<JSONBoolean>(*this);
+}
 
 std::string JSONBoolean::toString() const {
     return value ? "true" : "false";

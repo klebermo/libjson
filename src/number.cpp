@@ -2,20 +2,20 @@
 
 JSONNumber::JSONNumber() {}
 
+JSONNumber::JSONNumber(const JSONNumber& other) {
+    this->value = other.value;
+}
+
 JSONNumber::JSONNumber(int value) {
-    this->value = value;
+    this->value = static_cast<double>(value);
+}
+
+JSONNumber::JSONNumber(float value) {
+    this->value = static_cast<double>(value);
 }
 
 JSONNumber::JSONNumber(double value) {
     this->value = value;
-}
-
-JSONNumber::JSONNumber(const std::string& json_string) {
-    this->parse(json_string);
-}
-
-JSONNumber::JSONNumber(const Value& value) {
-    this->parse(value.toString());
 }
 
 JSONNumber::~JSONNumber() {}
@@ -23,6 +23,10 @@ JSONNumber::~JSONNumber() {}
 JSONNumber* JSONNumber::parse(const std::string& json_string) {
     value = std::stod(json_string);
     return this;
+}
+
+std::unique_ptr<Value> JSONNumber::clone() const {
+    return std::make_unique<JSONNumber>(*this);
 }
 
 std::string JSONNumber::toString() const {

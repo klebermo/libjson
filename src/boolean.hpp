@@ -8,11 +8,12 @@ private:
     bool value;
 public:
     JSONBoolean();
-    JSONBoolean(const std::string& json_string);
+    JSONBoolean(const JSONBoolean& other);
     JSONBoolean(bool value);
     ~JSONBoolean();
 
     JSONBoolean* parse(const std::string& json_string) override;
+    std::unique_ptr<Value> clone() const override;
     std::string toString() const override;
     std::string toJson() const override;
 };
