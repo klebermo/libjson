@@ -45,6 +45,42 @@ JSONObject::JSONObject(std::initializer_list<std::pair<std::string, bool>> value
     }
 }
 
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONString>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONString>(val);
+    }
+}
+
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONNumber>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONNumber>(val);
+    }
+}
+
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONBoolean>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONBoolean>(val);
+    }
+}
+
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONArray>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONArray>(val);
+    }
+}
+
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONObject>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONObject>(val);
+    }
+}
+
+JSONObject::JSONObject(std::initializer_list<std::pair<std::string, JSONNullable>> values) {
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONNullable>(val);
+    }
+}
+
 JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, std::string>> values) {
     this->values.clear();
     for (const auto& [key, val] : values) {
@@ -93,6 +129,54 @@ JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, b
     return *this;
 }
 
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONString>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONString>(val);
+    }
+    return *this;
+}
+
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONNumber>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONNumber>(val);
+    }
+    return *this;
+}
+
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONBoolean>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONBoolean>(val);
+    }
+    return *this;
+}
+
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONArray>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONArray>(val);
+    }
+    return *this;
+}
+
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONObject>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONObject>(val);
+    }
+    return *this;
+}
+
+JSONObject& JSONObject::operator=(std::initializer_list<std::pair<std::string, JSONNullable>> values) {
+    this->values.clear();
+    for (const auto& [key, val] : values) {
+        this->values[key] = std::make_unique<JSONNullable>(val);
+    }
+    return *this;
+}
+
 JSONObject& JSONObject::operator+=(std::pair<std::string, std::string> value) {
     this->values[value.first] = std::make_unique<JSONString>(value.second);
     return *this;
@@ -123,13 +207,33 @@ JSONObject& JSONObject::operator+=(std::pair<std::string, bool> value) {
     return *this;
 }
 
-JSONObject& JSONObject::operator+=(std::pair<std::string, JSONObject> value) {
-    this->values[value.first] = std::make_unique<JSONObject>(value.second);
+JSONObject& JSONObject::operator+=(std::pair<std::string, JSONString> value) {
+    this->values[value.first] = std::make_unique<JSONString>(value.second);
+    return *this;
+}
+
+JSONObject& JSONObject::operator+=(std::pair<std::string, JSONNumber> value) {
+    this->values[value.first] = std::make_unique<JSONNumber>(value.second);
+    return *this;
+}
+
+JSONObject& JSONObject::operator+=(std::pair<std::string, JSONBoolean> value) {
+    this->values[value.first] = std::make_unique<JSONBoolean>(value.second);
     return *this;
 }
 
 JSONObject& JSONObject::operator+=(std::pair<std::string, JSONArray> value) {
     this->values[value.first] = std::make_unique<JSONArray>(value.second);
+    return *this;
+}
+
+JSONObject& JSONObject::operator+=(std::pair<std::string, JSONObject> value) {
+    this->values[value.first] = std::make_unique<JSONObject>(value.second);
+    return *this;
+}
+
+JSONObject& JSONObject::operator+=(std::pair<std::string, JSONNullable> value) {
+    this->values[value.first] = std::make_unique<JSONNullable>(value.second);
     return *this;
 }
 
@@ -219,80 +323,4 @@ Value& JSONObject::operator[](std::string key) {
 
 int JSONObject::size() const {
     return this->values.size();
-}
-
-void JSONObject::add(std::string key, std::unique_ptr<Value> value) {
-    this->values[key] = std::move(value);
-}
-
-void JSONObject::add(std::string key, std::string value) {
-    this->values[key] = std::make_unique<JSONString>(value);
-}
-
-void JSONObject::add(std::string key, const char * value) {
-    this->values[key] = std::make_unique<JSONString>(value);
-}
-
-void JSONObject::add(std::string key, int value) {
-    this->values[key] = std::make_unique<JSONNumber>(value);
-}
-
-void JSONObject::add(std::string key, float value) {
-    this->values[key] = std::make_unique<JSONNumber>(value);
-}
-
-void JSONObject::add(std::string key, double value) {
-    this->values[key] = std::make_unique<JSONNumber>(value);
-}
-
-void JSONObject::add(std::string key, bool value) {
-    this->values[key] = std::make_unique<JSONBoolean>(value);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<std::string> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<const char*> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<int> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<float> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<double> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
-}
-
-void JSONObject::add(std::string key, std::initializer_list<bool> values) {
-    JSONArray array;
-    for (const auto& val : values) {
-        array.add(val);
-    }
-    this->values[key] = std::make_unique<JSONArray>(array);
 }

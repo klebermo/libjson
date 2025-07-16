@@ -16,6 +16,18 @@ public:
     std::unique_ptr<Value> clone() const override;
     std::string toString() const override;
     std::string toJson() const override;
+
+    JSONString& operator=(const JSONString& other) {
+        if (this != &other) {
+            value = other.value;
+        }
+        return *this;
+    }
+
+    JSONString& operator=(const std::string& value) {
+        this->value = value;
+        return *this;
+    }
 };
 
 #endif
